@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+
+  #  Mysql container configuration
+  mysql:
+    image: mysql:5.7
+    container_name: dashboard-mysql
+    restart: always
+    hostname: mysql
+    ports:
+      #  Opens port 3306 on the container
+      - "3306:3306"
+    volumes:
+      - ./db/db_utils:/home/db
+      - ./db/db_data:/var/lib/mysql
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=<MYSQL_ROOT_PASSWORD>
+      - MYSQL_DATABASE=devopsDatabase
+
+  dashboard-back:
+    image: <REGISTRY>/devops/dashboard/dashboard-back:<VERSION_BACK>
+    container_name: dashboard-back
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - mysql
+      - mongodb:mongo
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_HOST=mysql
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=<SPRING_DATASOURCE_PASSWORD>
+      - SPRING_JPA_HIBERNATE_DDL=<SPRING_JPA_HIBERNATE_DDL>
+      - SPRING_JPA_SHOW_SQL=false
+
+  dashboard-front:
+    image: <REGISTRY>/devops/dashboard/dashboard-front:<VERSION_FRONT>
+    container_name: dashboard-front
+    restart: always
+    ports:
+      - "80:80"
+    links:
+      - dashboard-back
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8083:8080
