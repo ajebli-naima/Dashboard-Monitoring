@@ -41,7 +41,7 @@ services:
     container_name: dashboard-front
     restart: always
     ports:
-      - "80:80"
+      - "81:80"
     links:
       - dashboard-back
 
