@@ -27,7 +27,6 @@ services:
       - "8080:8080"
     links:
       - mysql
-      - mongodb:mongo
     depends_on:
       - mysql
     environment:
