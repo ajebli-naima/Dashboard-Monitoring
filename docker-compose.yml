@@ -10,7 +10,7 @@ services:
     hostname: mysql
     ports:
       #  Opens port 3306 on the container
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./db/db_utils:/home/db
       - ./db/db_data:/var/lib/mysql
